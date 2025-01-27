@@ -5,6 +5,7 @@ import win32gui, time, json, os, threading, psutil, win32process, win32api, win3
 import dearpygui.dearpygui as dpg
 import pyMeow as pm
 strt="FD"
+testUserEdit="fdsaf"
 user32 = ctypes.WinDLL("user32")
 configFilePath = f"{os.environ['LOCALAPPDATA']}\\temp\\nameIt"
 class configListener(dict):
