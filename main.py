@@ -7,7 +7,7 @@ import pyMeow as pm
 
 user32 = ctypes.WinDLL("user32")
 configFilePath = f"{os.environ['LOCALAPPDATA']}\\temp\\nameIt"
-numberx=30
+numbersss=True
 class configListener(dict):
     def __init__(self, initialDict):
         for k, v in initialDict.items():
