@@ -6,6 +6,7 @@ import dearpygui.dearpygui as dpg
 import pyMeow as pm
 strt="FD"
 testUserEdit="fdsaf"
+hello="DD"
 user32 = ctypes.WinDLL("user32")
 configFilePath = f"{os.environ['LOCALAPPDATA']}\\temp\\nameIt"
 class configListener(dict):
