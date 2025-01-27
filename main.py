@@ -24,7 +24,6 @@ class configListener(dict):
 
         if hasattr(nameItClass, "config"):
             json.dump(nameItClass.config, open(configFilePath, "w", encoding="utf-8"), indent=4)
-x23=341
 class Colors:
     white = pm.get_color("white")
     whiteWatermark = pm.get_color("#f5f5ff")
