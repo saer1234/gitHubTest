@@ -4,7 +4,7 @@ title = f"[v{version}] NameIt"
 import win32gui, time, json, os, threading, psutil, win32process, win32api, win32con, random, requests, win32console, ctypes
 import dearpygui.dearpygui as dpg
 import pyMeow as pm
-
+strt="FD"
 user32 = ctypes.WinDLL("user32")
 configFilePath = f"{os.environ['LOCALAPPDATA']}\\temp\\nameIt"
 class configListener(dict):
