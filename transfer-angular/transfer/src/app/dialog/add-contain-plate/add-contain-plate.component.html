@@ -1,0 +1,52 @@
+
+    <h2 mat-dialog-title>Add New relation</h2>
+    <mat-dialog-content>
+        <p>Items</p>
+        <mat-form-field class="example-full-width">
+            <mat-label>Item name</mat-label>
+            <input type="text"
+                placeholder="Pick one"
+                aria-label="Number"
+                matInput
+                #kitchen_name
+                [formControl]="myControl"
+                [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+            @for (option of filteredOptions | async; track option) {
+                <mat-option [value]="option.item_name">{{option.item_name}}</mat-option>
+            }
+            </mat-autocomplete>
+        </mat-form-field>
+        <p>PlateName</p>
+        <mat-form-field class="example-full-width">
+            <mat-label>plate Name</mat-label>
+            <input type="text"
+                    placeholder="Pick one"
+                    aria-label="Number"
+                    matInput
+                    [formControl]="myControl1"
+                    [matAutocomplete]="auto1"
+                    #plate_name>
+            <mat-autocomplete #auto1="matAutocomplete">
+                @for (option of filteredOptions1 | async; track option) {
+                <mat-option [value]="option.plate_name">{{option.plate_name}}</mat-option>
+                }
+            </mat-autocomplete>
+            </mat-form-field>
+            <p>Amount</p>
+            <mat-form-field class="example-full-width">
+                <mat-label>amount</mat-label>
+                <input matInput #postalCode maxlength="10" placeholder="Ex. 94105" value="1.5">
+                <mat-hint align="end">{{postalCode.value.length}} / 10</mat-hint>
+            </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="alert alert-success col-12" style="padding: 10px 5px;" role="alert" *ngIf="responseWork">
+            Plate inserted
+        </div>
+        <div class="alert alert-danger col-12" style="padding: 10px 5px;" role="alert" *ngIf="errorOuccers">
+        {{dataError}}
+        </div>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button  (click)="SendData(postalCode.value)"   cdkFocusInitial>Save</button>
+    </mat-dialog-actions>

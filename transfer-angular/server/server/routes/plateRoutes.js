@@ -1,0 +1,15 @@
+const express = require("express");
+const {readToken,readPlayOut,outAmontPlate,updatePlateo,deletePlateo,deletePlate,updatePlate,createPlate,getPlate,getPlateo,createPlateo}=require("../controllers/plateController");
+const router = express.Router();
+router.get("/",getPlate);
+router.get("/plate_on/",getPlateo);
+router.get("/watchPlateOut/:id/:date_in/:date_out",readPlayOut);
+router.get("/token/:token",readToken);
+router.post("/",createPlate);
+router.post("/plate_on/",createPlateo);
+router.put("/:id",updatePlate);
+router.put("/plate_on/:id",updatePlateo);
+router.delete("/:id",deletePlate);
+router.delete("/plate_on/:id",deletePlateo);
+router.post("/outAmount/",outAmontPlate);
+module.exports= router;

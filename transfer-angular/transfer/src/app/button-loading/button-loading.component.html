@@ -1,0 +1,5 @@
+<button class="button login__submit" [disabled]="display">
+    <i *ngIf="display" class="fa fa-spinner fa-spin text-center" style="margin: auto;"></i>
+    <span *ngIf="!display" class="button__text">Log In Now</span>
+    <i  *ngIf="!display"class="button__icon fas fa-chevron-right"></i>
+</button>

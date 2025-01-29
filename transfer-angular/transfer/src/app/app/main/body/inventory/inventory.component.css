@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+
+  .col-spec{
+    padding: 0.5rem 0px;
+  }
+  .main-container{
+    padding: 2rem;
+  }
+
+  @media (max-width:470px) {
+    .row > *,.main-container {
+      padding: 1rem 0.7rem;
+      margin: 0px;
+    }
+    .col-spec{
+      padding: 0.5rem 0px;
+    }
+    .mdc-data-table__cell, .mdc-data-table__header-cell{
+      padding: 0 5px;
+    }
+  }
