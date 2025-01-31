@@ -1,0 +1,220 @@
+<div class="container-sm main-container" >
+    <p  style="font-weight:bolder;font-size: 20px;font-family: var(--mdc-protected-button-label-text-font, var(--mat-app-label-large-font));">Outcome Page</p>  
+    <div class="row">
+        <p  style="font-weight:500;font-size: 16px;font-family: var(--mdc-protected-button-label-text-font, var(--mat-app-label-large-font));">Add new Outcome</p>  
+        <div class="col-xl-5">
+            <div class="row" style="margin: 0.5rem 0px;">
+            <mat-form-field>
+                <mat-label>Kitchen</mat-label>
+                <input type="text" placeholder="choose kitchen" aria-label="text" matInput [formControl]="kitchenNames" [matAutocomplete]="auto"/>
+                <mat-autocomplete #auto="matAutocomplete">
+                        @for(option of filteredOptions | async; track option){
+                            <mat-option [value]="option.kitchen_name"> {{option.kitchen_name}}</mat-option>
+                        }
+                </mat-autocomplete>
+            </mat-form-field>
+            </div>
+            <div class="row" style="margin: 0.5rem 0px;">
+                <mat-form-field>
+                    <mat-label>Items</mat-label>
+                    <input matInput type="text" placeholder="Octopus" [formControl]="controlItems" [matAutocomplete]="auto1">
+                    <mat-autocomplete #auto1="matAutocomplete">
+                        @for(items of filterItems| async; track items){
+                            <mat-option [value]="items.item_name">{{items.item_name}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="row" style="margin: 0.5rem 0px;">
+                <mat-form-field>
+                    <mat-label>Choose date</mat-label>
+                    <input matInput [matDatepicker]="picker" [formControl]="ControlDatePicker"/>
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="row" style="margin:0px;">
+                <mat-form-field>
+                    <mat-label>Amount</mat-label>
+                    <input maxlength="7" matInput  #amount type="number" value="1" placeholder="3.45"/>
+                    <mat-hint align="end">{{amount.value.length}}/7</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="row" style="margin: 0.5rem 0px;display: flex;flex-direction:row;">
+                <button (click)="fillArrayDataIncome(amount)" style="max-width:120px;margin: 12px;" mat-flat-button>Save local</button>
+                <button (click)="clearData()" style="max-width:120px;margin: 12px;" mat-raised-button>Clear</button>
+                <button [disabled]="loadingSend" (click)="sendDataToApi()" style="max-width:120px;margin: 12px;" mat-stroked-button>
+                    @if(loadingSend){
+                        <i class="fa fa-spinner fa-spin"></i>
+                    }@else{
+                        Send
+                    }
+                   
+                </button>
+            </div>
+        </div>
+        <div class="col-xl-7">
+            <div class="container-sm col-spec" >
+                <mat-form-field>
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex Fish" #input/>
+                </mat-form-field>
+                <table mat-table [dataSource]="dataSouce" class="mat-elevation-z8">
+                    <ng-container matColumnDef="kitchen_name">
+                        <th mat-header-cell *matHeaderCellDef>Kitchen Name</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.kitchen_name}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="item_name">
+                        <th mat-header-cell *matHeaderCellDef>Item name</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.item_name}} | {{displayUnit(e1)}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.amount}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.date_in}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let xr; let i=index"><i style="cursor: pointer;" class="bi bi-file-earmark-x p-2" (click)="deleteLocalData(i)"></i> </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="listColumn"></tr>
+                    <tr mat-row *matRowDef="let row; columns:listColumn;"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No Data Matchin the filter {{input.value}}</td>
+                    </tr>
+                </table>
+                <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+                    </mat-paginator>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <p  style="padding-top: 25px;font-weight:500;font-size: 16px;font-family: var(--mdc-protected-button-label-text-font, var(--mat-app-label-large-font));">Search Outcome Quantity</p>  
+    <div class="row" style="margin-top: 30px;">
+            <div class="col-xl-5">
+                <form [formGroup]="formSearchIncome" (ngSubmit)="searchData()">
+                <div class="row" style="margin: 0.5rem 0px;">
+                    <mat-form-field>
+                        <mat-label>Kitchen</mat-label>
+                        <input type="text" placeholder="choose kitchen" aria-label="text" matInput [formControl]="kitchenNames2" [matAutocomplete]="auto3"/>
+                        <mat-autocomplete #auto3="matAutocomplete">
+                                @for(option of filteredOptions2 | async; track option){
+                                    <mat-option [value]="option.kitchen_name"> {{option.kitchen_name}}</mat-option>
+                                }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    </div>
+                    <div class="row" style="margin: 0.5rem 0px;">
+                        <mat-form-field>
+                            <mat-label>Choose date</mat-label>
+                            <input matInput [matDatepicker]="picker4" formControlName="date_in"/>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker4"></mat-datepicker-toggle>
+                            <mat-datepicker #picker4></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="row" style="margin: 0.5rem 0px;">
+                        <mat-form-field>
+                            <mat-label>Choose date</mat-label>
+                            <input matInput [matDatepicker]="picker5" formControlName="date_out"/>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker5"></mat-datepicker-toggle>
+                            <mat-datepicker #picker5></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="row" style="margin: 0.5rem 0px;display: flex;flex-direction:row;">
+                        <button type="submit" [disabled]="loadingSearch" style="max-width:120px;margin: 12px;" mat-stroked-button>
+                            @if(loadingSearch){
+                                <i class="fa fa-spinner fa-spin"></i>
+                            }@else{
+                                Search
+                            }
+                        
+                        </button>
+                    </div>
+                </form>
+            </div>
+        <div class="col-xl-7">
+            <div class="container-sm col-spec" >
+                <mat-form-field>
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter1($event)" placeholder="Ex Fish" #input1/>
+                </mat-form-field>
+                <table mat-table [dataSource]="dataSouce1" class="mat-elevation-z8">
+                    <ng-container matColumnDef="kitchen_name">
+                        <th mat-header-cell *matHeaderCellDef>Kitchen Name</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.kitchen_name}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="item_name">
+                        <th mat-header-cell *matHeaderCellDef>Item name</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.item_name}} | {{displayUnit(e1)}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.amount}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let e1">{{e1.date_in}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let xr; let i=index"><i class="bi bi-pen p-2" (click)="openDialogEdit(xr)" style="cursor: pointer;"></i><i style="cursor: pointer;" class="bi bi-file-earmark-x p-2" (click)="DeleteItemsA(xr)"></i> </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="listColumn"></tr>
+                    <tr mat-row *matRowDef="let row; columns:listColumn;"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No Data Matchin the filter {{input1.value}}</td>
+                    </tr>
+                </table>
+                <mat-paginator #paginator2 [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+                    </mat-paginator>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <p  style="padding-top: 25px;font-weight:500;font-size: 16px;font-family: var(--mdc-protected-button-label-text-font, var(--mat-app-label-large-font));">Total Outcome Quantity</p>  
+    <div class="row" style="margin-top: 30px;">
+        <div class="container-sm col-spec" >
+            <mat-form-field>
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter2($event)" placeholder="Ex Fish" #input2/>
+            </mat-form-field>
+            <table mat-table [dataSource]="dataSouce2" class="mat-elevation-z8">
+                <ng-container matColumnDef="kitchen_name">
+                    <th mat-header-cell *matHeaderCellDef>Kitchen Name</th>
+                    <td mat-cell *matCellDef="let e1">{{e1.kitchen_name}}</td>
+                </ng-container>
+                <ng-container matColumnDef="item_name">
+                    <th mat-header-cell *matHeaderCellDef>Item name</th>
+                    <td mat-cell *matCellDef="let e1">{{e1.item_name}} | {{displayUnit(e1)}}</td>
+                </ng-container>
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let e1">{{e1.amount}}</td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let e1">{{e1.date_in}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="listColumn2"></tr>
+                <tr mat-row *matRowDef="let row; columns:listColumn2;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No Data Matchin the filter {{input2.value}}</td>
+                </tr>
+            </table>
+            <mat-paginator #paginator3 [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+                    </mat-paginator>
+        </div>
+    </div>
+</div>

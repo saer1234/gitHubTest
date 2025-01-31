@@ -1,0 +1,48 @@
+
+@if(editOrInsert==false){
+  <h2 mat-dialog-title>Edit {{data.item_name}}</h2>
+}@else{
+  <h2 mat-dialog-title>Add new item</h2>
+}
+<mat-dialog-content>
+  <p>Name Item?</p>
+  <mat-form-field class="inputs">
+    <mat-label>Item_Name</mat-label>
+    <input matInput [(ngModel)]="data.item_name" />
+  </mat-form-field>
+  <p>Unit of item</p>
+  <mat-form-field  class="inputs">
+    <mat-label>Unit</mat-label>
+    <input matInput [(ngModel)]="data.unit" />
+  </mat-form-field>
+  <p>date was inserted</p>
+  <mat-form-field  class="inputs">
+    <mat-label>Choose a date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data.date">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div *ngIf="successBoolean" class="alert alert-success" role="alert" style="width: 100%;">
+   Successfully Changed
+  </div>
+  <div  *ngIf="errorBoolean"  class="alert alert-danger" role="alert" style="width: 100%;">
+    Successfully Changed
+   </div>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <ng-template [ngIf]="!editOrInsert">
+    <button  mat-button (click)="sendData()"  cdkFocusInitial [disabled]="!loading">
+      <i *ngIf="!loading" class="fa fa-spinner fa-spin text-center" style="margin: auto;"></i>
+      <span  *ngIf="loading">Ok</span>
+    </button>
+  </ng-template>
+  <ng-template [ngIf]="editOrInsert">
+  <button   mat-button (click)="inserData()"  cdkFocusInitial [disabled]="!loading">
+    <i *ngIf="!loading" class="fa fa-spinner fa-spin text-center" style="margin: auto;"></i>
+    <span  *ngIf="loading">Ok</span>
+  </button>
+  </ng-template>
+</mat-dialog-actions>
+

@@ -1,0 +1,38 @@
+/* Structure */
+table {
+    width: 100%;
+  }
+  
+  .mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .example-form {
+    min-width: 150px;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+.plate_b{
+  width: 140px;
+  margin: 0px 0.4rem;
+}
+
+.col-spec{
+  padding: 1rem;
+}
+.main-container{
+  padding: 2rem;
+}
+@media (max-width:470px) {
+  .row ,.col-spec,.main-container {
+    padding: 1rem 0rem;
+    margin: 0px;
+  }
+  .mdc-data-table__cell, .mdc-data-table__header-cell{
+    padding: 0 5px;
+  }
+}
